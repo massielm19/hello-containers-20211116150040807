@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploynuevo-massiel-pyxis-tekton
+  namespace: default
+  labels:
+     app: deploynuevo-massiel-pyxis-tekton
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploynuevo-massiel-pyxis-tekton
+  template:
+    metadata:
+      labels:
+        app: deploynuevo-massiel-pyxis-tekton
+    spec:
+      containers:
+      - name: deploynuevo-massiel-pyxis-tekton
+        image: us.icr.io/<namespace>/<image>:<tag>
+        ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicionuevo-massiel-pyxis-tekton
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: deploynuevo-massiel-pyxis-tekton
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+    name: ruta-massiel-pyxis-tekton
+    namespace: default
+spec:
+    to:
+        kind: Service
+        name: servicionuevo-massiel-pyxis-tekton
+
+
+
+
+
+
+
